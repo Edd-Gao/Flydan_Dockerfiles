@@ -78,6 +78,7 @@ RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_make -C /catkin_ws"
 
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
+RUN chmod +x /ros_entrypoint.sh
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
