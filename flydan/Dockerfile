@@ -63,4 +63,27 @@ RUN echo export SITL_GAZEBO_PATH=/Firmware/Tools/sitl_gazebo/Build >> ~/.bashrc
 #install rosjava
 RUN apt-get install ros-indigo-rosjava -y
 
+# install packages
+RUN apt-get update && apt-get install -q -y \
+    build-essential \
+    cmake \
+    imagemagick \
+    libboost-all-dev \
+    libgts-dev \
+    libjansson-dev \
+    libtinyxml-dev \
+    mercurial \
+    nodejs \
+    nodejs-legacy \
+    npm \
+    pkg-config \
+    psmisc\
+    && rm -rf /var/lib/apt/lists/*
+    
+# clone gzweb
+RUN hg clone https://bitbucket.org/osrf/gzweb ~/gzweb
 
+# build gzweb
+RUN cd ~/gzweb \
+    && hg up default \
+    && ./deploy.sh -m
