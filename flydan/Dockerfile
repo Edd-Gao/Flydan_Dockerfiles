@@ -72,13 +72,19 @@ RUN cd ~/gzweb \
     && ./deploy.sh -m
 
 #create and init catkin_ws
-RUN mkdir -p /catkin_ws/src
-RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_init_workspace /catkin_ws/src"
-RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_make -C /catkin_ws"
+RUN mkdir -p ~/catkin_ws/src
+RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_init_workspace ~/catkin_ws/src"
+RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_make -C ~/catkin_ws"
+
+#clone gazebo models
+RUN hg clone https://bitbucket.org/osrf/gazebo_models ~/models
+
+RUN cd ~/models \
+    && hg up default
 
 # setup entrypoint
-COPY ./ros_entrypoint.sh /
-RUN chmod +x /ros_entrypoint.sh
+COPY ./entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/ros_entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
