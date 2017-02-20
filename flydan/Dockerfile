@@ -38,14 +38,6 @@ RUN apt-get install -y -q python-argparse \
     build-essential \
     genromfs   
 
-#clone PX4 firmware
-RUN git clone https://github.com/PX4/Firmware.git /Firmware
-RUN cd /Firmware; git checkout v1.4.4 -b v1.4.4; git submodule update --init --recursive
-RUN apt-get install -q -y protobuf-compiler
-RUN cd /Firmware; make posix_sitl_default
-RUN mkdir -p /Firmware/Tools/sitl_gazebo/Build
-RUN cd /Firmware/Tools/sitl_gazebo/Build; cmake ..; make
-
 # install packages
 RUN apt-get install -q -y \
     build-essential \
@@ -71,16 +63,24 @@ RUN cd ~/gzweb \
     && hg up default \
     && ./deploy.sh -m
 
-#create and init catkin_ws
-RUN mkdir -p ~/catkin_ws/src
-RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_init_workspace ~/catkin_ws/src"
-RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_make -C ~/catkin_ws"
-
 #clone gazebo models
 RUN hg clone https://bitbucket.org/osrf/gazebo_models ~/models
 
 RUN cd ~/models \
     && hg up default
+
+#clone PX4 firmware
+RUN git clone https://github.com/PX4/Firmware.git ~/Firmware
+RUN cd ~/Firmware; git checkout v1.4.4 -b v1.4.4; git submodule update --init --recursive
+RUN apt-get install -q -y protobuf-compiler
+RUN cd ~/Firmware; make posix_sitl_default
+RUN mkdir -p ~/Firmware/build_gazebo
+RUN cd ~/Firmware/build_gazebo; cmake ~/Firmware/Tools/sitl_gazebo; make
+
+#create and init catkin_ws
+RUN mkdir -p ~/catkin_ws/src
+RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_init_workspace ~/catkin_ws/src"
+RUN bash -c "source /opt/ros/indigo/setup.bash;catkin_make -C ~/catkin_ws"
 
 # setup entrypoint
 COPY ./entrypoint.sh /
