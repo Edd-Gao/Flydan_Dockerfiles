@@ -52,8 +52,7 @@ RUN apt-get install -q -y \
     nodejs-legacy \
     npm \
     pkg-config \
-    psmisc\
-    && rm -rf /var/lib/apt/lists/*
+    psmisc
     
 # clone gzweb
 RUN hg clone https://bitbucket.org/osrf/gzweb ~/gzweb
