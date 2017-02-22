@@ -70,7 +70,7 @@ RUN cd ~/models \
 
 #clone PX4 firmware
 RUN git clone https://github.com/PX4/Firmware.git ~/Firmware
-RUN cd ~/Firmware; git checkout v1.4.4 -b v1.4.4; git submodule update --init --recursive
+RUN cd ~/Firmware; git checkout v1.5.5 -b v1.5.5; git submodule update --init --recursive
 RUN apt-get install -q -y protobuf-compiler
 RUN cd ~/Firmware; make posix_sitl_default
 RUN mkdir -p ~/Firmware/build_gazebo
