@@ -16,7 +16,10 @@ RUN apt-get install -q -y ros-indigo-rosjava \
     libzbar-dev \
     ros-indigo-tf2-ros \
     ros-indigo-mavros \
-    ros-indigo-rosjava
+    ros-indigo-mavros-extras \
+    ros-indigo-rosjava \
+    ros-indigo-rqt-* \
+    ros-indigo-rqt
 
 #install gazebo 7
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
